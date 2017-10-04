@@ -18,55 +18,59 @@
 function stringify(obj, replacer, space) {
 
   if (typeof replacer === 'string' || typeof replacer === 'number') {
+    // noinspection JSValidateTypes
     space = replacer;
+    // noinspection JSValidateTypes
     replacer = undefined;
   }
   const replacerArgs = replacer ? replacer.length : 0;
   if (space && typeof space === 'number') {
-    let i = space;
+    var i = space;
     space = ' ';
     while (i-- > 1)
       space += ' ';
   }
 
   const toString = function(o, k, v) {
+    var z;
     if (replacerArgs === 2) {
-      const z = replacer(k, v);
+      z = replacer(k, v);
       return z === undefined ? z : JSON.stringify(z);
     }
     if (replacerArgs === 3) {
-      const z = replacer(o, k, v);
+      z = replacer(o, k, v);
       return z === undefined ? z : JSON.stringify(z);
     }
     return JSON.stringify(v);
   };
 
-  let result = '';
-  let indent = 0;
+  var result = '';
+  var indent = 0;
   const refs = [];
   const doStringify = function(obj, key, value) {
     // Check circular references
     const arrayOfObject = Array.isArray(value) || isPlainObject(value);
-    if (arrayOfObject && refs.includes(value)) {
+    if (arrayOfObject && refs.indexOf(value) >= 0) {
       result += '"[Circular]"';
       return;
     }
     const getIndent = function(n) {
       if (!space) return '';
       indent += (n || 0);
-      let s = '\n';
-      let k = indent;
+      var s = '\n';
+      var k = indent;
       while (k-- > 0)
         s += space;
       return s;
     };
 
+    var i;
     // serialize array
     if (Array.isArray(value)) {
       refs.push(value);
       result += '[' + getIndent(1);
-      let i = 0;
-      value.forEach((v, k) => {
+      i = 0;
+      value.forEach(function(v, k) {
         if (Array.isArray(v) || isPlainObject(v)) {
           result += (i ? ',' + getIndent() : '');
           doStringify(value, k, v);
@@ -87,8 +91,8 @@ function stringify(obj, replacer, space) {
     if (isPlainObject(value)) {
       refs.push(value);
       result += '{' + getIndent(1);
-      let i = 0;
-      Object.getOwnPropertyNames(value).forEach(k => {
+      i = 0;
+      Object.getOwnPropertyNames(value).forEach(function(k) {
         const v = value[k];
         if (Array.isArray(v) || isPlainObject(v)) {
           result += (i ? ',' + getIndent() : '') +
