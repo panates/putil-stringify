@@ -1,7 +1,7 @@
 {
   "name": "putil-stringify",
   "description": "Alternate to native JSON.stringify which offers more control in replacer callback",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "author": "Panates Ltd.",
   "contributors": [
     "Eray Hanoglu <e.hanoglu@panates.com>"
